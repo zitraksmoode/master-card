@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankdb
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/migration/master.xml
+
+jwt:
+  secret: ${JWT_SECRET:super-mega-secret-key-that-nobody-will-guess-1234567890}
+  expiration-ms: 86400000
+
+encryption:
+  key: ${ENCRYPTION_KEY:0123456789abcdef0123456789abcdef}
