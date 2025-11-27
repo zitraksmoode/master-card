@@ -20,8 +20,8 @@ spring:
     change-log: classpath:db/migration/master.xml
 
 jwt:
-  secret: ${JWT_SECRET:super-mega-secret-key-that-nobody-will-guess-1234567890}
+  secret: super-mega-secret-1234567890-abcdefghijklmnopqrstuvwxyz
   expiration-ms: 86400000
 
 encryption:
-  key: ${ENCRYPTION_KEY:0123456789abcdef0123456789abcdef}
+  key: 0123456789abcdef0123456789abcdef

@@ -1,13 +1,13 @@
-package Bank.master_card;
+package com.example.bank;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MasterCardApplication {
+public class BankApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MasterCardApplication.class, args);
+		SpringApplication.run(BankApplication.class, args);
 	}
 
 }
