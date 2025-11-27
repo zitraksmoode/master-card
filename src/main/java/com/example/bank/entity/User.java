@@ -24,5 +24,5 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Card> cards;  // ← ВОТ ТАК ПРАВИЛЬНО!
+    private List<Card> cards;
 }

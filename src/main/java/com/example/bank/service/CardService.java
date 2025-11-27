@@ -2,7 +2,9 @@ package com.example.bank.service;
 
 import com.example.bank.dto.CardResponse;
 import com.example.bank.dto.CreateCardRequest;
+import com.example.bank.dto.TransferRequest;
 import com.example.bank.entity.Card;
+import com.example.bank.entity.CardStatus;
 import com.example.bank.entity.User;
 import com.example.bank.repository.CardRepository;
 import com.example.bank.repository.UserRepository;
@@ -59,4 +61,35 @@ public class CardService {
                 card.getBalance()
         );
     }
+    @Transactional
+    public void transfer(TransferRequest request, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Card from = cardRepository.findById(request.fromCardId())
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+        Card to = cardRepository.findById(request.toCardId())
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+
+        // Проверки по ТЗ
+        if (!from.getOwner().equals(user) || !to.getOwner().equals(user)) {
+            throw new RuntimeException("Можно переводить только между своими картами");
+        }
+        if (from.getStatus() != CardStatus.ACTIVE || to.getStatus() != CardStatus.ACTIVE) {
+            throw new RuntimeException("Одна из карт неактивна");
+        }
+        if (from.getBalance().compareTo(request.amount()) < 0) {
+            throw new RuntimeException("Недостаточно средств");
+        }
+        if (from.equals(to)) {
+            throw new RuntimeException("Нельзя переводить на ту же карту");
+        }
+
+        from.setBalance(from.getBalance().subtract(request.amount()));
+        to.setBalance(to.getBalance().add(request.amount()));
+
+        cardRepository.save(from);
+        cardRepository.save(to);
+    }
+
 }

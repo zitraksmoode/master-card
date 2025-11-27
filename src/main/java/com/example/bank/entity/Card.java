@@ -36,8 +36,7 @@ public class Card {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    // Маскированный номер для вывода (**** **** **** 1234)
-    @Transient // не сохраняется в БД
+    @Transient
     public String getMaskedCardNumber() {
         if (cardNumber == null || cardNumber.length() < 4) return "**** **** **** ****";
         String last4 = cardNumber.substring(cardNumber.length() - 4);
