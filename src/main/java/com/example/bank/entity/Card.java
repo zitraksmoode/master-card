@@ -42,4 +42,6 @@ public class Card {
         String last4 = cardNumber.substring(cardNumber.length() - 4);
         return "**** **** **** " + last4;
     }
+    @Column(nullable = false)
+    private boolean blockRequested = false;
 }

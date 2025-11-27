@@ -91,5 +91,40 @@ public class CardService {
         cardRepository.save(from);
         cardRepository.save(to);
     }
+    private Card getCardAndCheckOwner(Long cardId, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return cardRepository.findById(cardId)
+                .filter(card -> card.getOwner().getId().equals(user.getId()))
+                .orElseThrow(() -> new RuntimeException("Карта не принадлежит пользователю"));
+    }
+    @Transactional
+    public void requestBlock(Long cardId, String username) {
+        Card card = getCardAndCheckOwner(cardId, username);
+
+        if (card.getStatus() != CardStatus.ACTIVE) {
+            throw new RuntimeException("Карта уже неактивна");
+        }
+        if (card.isBlockRequested()) {
+            throw new RuntimeException("Запрос на блокировку уже отправлен");
+        }
+
+        card.setBlockRequested(true);
+        cardRepository.save(card);
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
+    public void approveBlock(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+        if (!card.isBlockRequested()) {
+            throw new RuntimeException("Нет запроса на блокировку");
+        }
+        card.setStatus(CardStatus.BLOCKED);
+        card.setBlockRequested(false);
+        cardRepository.save(card);
+    }
 
 }

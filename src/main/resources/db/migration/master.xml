@@ -43,10 +43,14 @@
             <column name="owner_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="block_requested" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="cards" baseColumnNames="owner_id"
                                  referencedTableName="users" referencedColumnNames="id"
                                  constraintName="fk_card_owner"/>
     </changeSet>
+
 </databaseChangeLog>
